@@ -59,7 +59,9 @@
     (fn [s](and (satisfies-rule-1? s seed) (satisfies-rule-2? s seed index)))
     (combo/permutations seed)))
 
-
+(defn construct-permutations-tree
+  [root depth]
+  (recur [level 0]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
