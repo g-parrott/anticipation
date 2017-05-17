@@ -6,7 +6,7 @@
   "Tests if the parameters (assumed to be sequences)
   satisfy the property: test-against_i = 1 -> target_i = 0"
   [target test-against]
-  (loop [a target b test-against]
+  (loop [a (into [] target)  b (into [] test-against)]
     (if (and (= (first b) 1) (= (first a) 1))
       false
       (if (or (= a nil) (= b nil))
@@ -69,7 +69,7 @@
   which satisfy rule-1 from the permutations of 'seed'"
   [seed]
   (filter
-    (fn [s] (satisfies-rule-1? s seed))
+    (fn [s] (satisfies-rule-1? seed s))
     (combo/permutations seed)))
 
 (defn get-satisfactory-sets-for-rule-2
@@ -88,9 +88,8 @@
   [parent child-fn]
   {:parent parent :children (child-fn parent)})
 
-(defn make-rule-1-tree
-  [root depth]
-  )
+(let [children (:children (make-tree-node-by-fn [0 1 1 0 1 1 0 0 1 0 0] get-satisfactory-sets-for-rule-1))]
+  (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
