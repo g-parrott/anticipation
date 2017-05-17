@@ -88,8 +88,15 @@
   [parent child-fn]
   {:parent parent :children (child-fn parent)})
 
+(defn make-children
+  [parent]
+  (let [children (:children (make-tree-node-by-fn parent get-satisfactory-sets-for-rule-1))]
+  (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children)))
+
 (let [children (:children (make-tree-node-by-fn [0 1 1 0 1 1 0 0 1 0 0] get-satisfactory-sets-for-rule-1))]
   (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children))
+
+(flatten (map (fn [m] (map make-children (:children m))) (make-children [1 0 0 0])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
