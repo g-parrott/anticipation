@@ -68,7 +68,7 @@
   be a sequence of binary digits, returns all sets
   which satisfy rule-1 from the permutations of 'seed'"
   [seed]
-  (filter
+   (filter
     (fn [s] (satisfies-rule-1? seed s))
     (combo/permutations seed)))
 
@@ -90,13 +90,23 @@
 
 (defn make-children
   [parent]
-  (let [children (:children (make-tree-node-by-fn parent get-satisfactory-sets-for-rule-1))]
+  (let [children (:children  (make-tree-node-by-fn parent get-satisfactory-sets-for-rule-1))]
   (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children)))
 
-(let [children (:children (make-tree-node-by-fn [0 1 1 0 1 1 0 0 1 0 0] get-satisfactory-sets-for-rule-1))]
-  (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children))
+(defn what-is-this
+  [seed]
+   (map (fn [m] (map make-children (:children m))) (make-children seed)))
 
-(flatten (map (fn [m] (map make-children (:children m))) (make-children [1 0 0 0])))
+(flatten (what-is-this [1 0 1 0 0]))
+
+(flatten (apply combo/cartesian-product (combo/permutations '(1 1 0 0)) (combo/permutations '(1 0 0 0))))
+
+(defn idk
+  [& sequences]
+  (flatten (apply combo/cartesian-product (map #(combo/permutations %) sequences))))
+
+
+(idk '(1 0 0 0) '(1 1 0 0) '(1 1 1 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
