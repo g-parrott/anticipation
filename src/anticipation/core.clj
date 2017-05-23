@@ -99,14 +99,14 @@
 
 (flatten (what-is-this [1 0 1 0 0]))
 
-(flatten (apply combo/cartesian-product (combo/permutations '(1 1 0 0)) (combo/permutations '(1 0 0 0))))
+(flatten (apply combo/cartesian-product (combo/permutations '(1 0 0)) (combo/permutations '(1 0 1))))
 
 (defn idk
   [& sequences]
   (flatten (apply combo/cartesian-product (map #(combo/permutations %) sequences))))
 
 
-(idk '(1 0 0 0) '(1 1 0 0) '(1 1 1 0))
+(idk '(1 0 0 0) '(1 1 0 0) '(1 1 1 0 1 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
