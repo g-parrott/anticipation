@@ -81,6 +81,7 @@
     (fn [s] (satisfies-rule-2? s seed index))
     (combo/permutations seed)))
 
+; cool
 (defn make-tree-node-by-fn
   "given 'parent' and a function which takes 1 parameter
   returns a hash-map containing the parent and the result of the
@@ -88,25 +89,49 @@
   [parent child-fn]
   {:parent parent :children (child-fn parent)})
 
+;; losing control
 (defn make-children
   [parent]
   (let [children (:children  (make-tree-node-by-fn parent get-satisfactory-sets-for-rule-1))]
   (map (fn [s] (make-tree-node-by-fn s get-satisfactory-sets-for-rule-1)) children)))
 
+; who knows?
 (defn what-is-this
   [seed]
    (map (fn [m] (map make-children (:children m))) (make-children seed)))
 
+; interesting
 (flatten (what-is-this [1 0 1 0 0]))
 
+; testing
 (flatten (apply combo/cartesian-product (combo/permutations '(1 0 0)) (combo/permutations '(1 0 1))))
 
+; who knows?
 (defn idk
   [& sequences]
   (flatten (apply combo/cartesian-product (map #(combo/permutations %) sequences))))
 
-
+; gettings somewhere
 (idk '(1 0 0 0) '(1 1 0 0) '(1 1 1 0 1 0))
+
+;; ugh
+(defn but-last [s] (take (- (count s) 1) s))
+
+;; someone probably wrote this before
+(do-n [f n] (loop [i 1 v nil] (if (= i n) (f v) (recur (inc i) (f v)))))
+
+;; more music theory stuff
+(def western-ring (into [] (range 1 7)))
+(defn rotate-ring-right [ring] (into [] (cons (last ring) (but-last ring))))
+(defn rotate-ring-left [ring] (into [] (cons (last ring) (conj (rest ring) (first ring)))))
+
+;; intervals
+(defn unison [center ring] center)
+(defn minor-third [n] ())
+(defn major-third [n])
+(defn )
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
