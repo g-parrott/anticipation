@@ -66,12 +66,7 @@
 (defn get-satisfactory-sets-for-rule-1
   "Given some initial sequence 'seed', assumed to
   be a sequence of binary digits, returns all sets
-  which satisfy rule-1 from the permutations of 'seed'"
-  [seed]
-   (filter
-    (fn [s] (satisfies-rule-1? seed s))
-    (combo/permutations seed)))
-
+  which satisfy rule-1 from the permutations of 'seed'" [seed] (filter (fn [s] (satisfies-rule-1? seed s)) (combo/permutations seed)))
 (defn get-satisfactory-sets-for-rule-2
   "Given some initial sequence 'seed', assumed to
   be a sequence of binary digits, returns all sets
@@ -115,32 +110,47 @@
 (idk '(1 0 0 0) '(1 1 0 0) '(1 1 1 0 1 0))
 
 ;; ugh
-(defn but-last [s] (take (- (count s) 1) s))
+;;(defn but-last [s] (take (- (count s) 1) s))
 
 ;; someone probably wrote this before
-(do-n [f n] (loop [i 1 v nil] (if (= i n) (f v) (recur (inc i) (f v)))))
+;; (defn do-n [f n] (loop [i 1 v nil] (if (= i n) (f v) (recur (inc i) (f v)))))
 
 ;; more music theory stuff
-(def western-ring (into [] (range 1 7)))
-(defn rotate-ring-right [ring] (into [] (cons (last ring) (but-last ring))))
-(defn rotate-ring-left [ring] (into [] (cons (last ring) (conj (rest ring) (first ring)))))
+;; (def western-ring (into [] (range 1 7)))
+;; (defn rotate-ring-right [ring] (into [] (cons (last ring) (but-last ring))))
+;; (defn rotate-ring-left [ring] (into [] (cons (last ring) (conj (rest ring) (first ring)))))
 
-;; intervals
-(defn unison [center ring] center)
-(defn minor-third [n] ())
-(defn major-third [n])
-(defn )
+;; parse csv utils
+(require '[clojure.string :as str])
+(defn csv-to-vec
+  "tokenizes a string which is a sequence of comma separated values"
+  [string]
+  (str/split string #", "))
 
+(defn parse-nums
+  ([string]
+  (map
+    (fn [token]
+      (read-string token))
+    (str/split string #" "))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(comment
-  A sequence of events is not a game design
-  Don't overengineer things
-  )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn parse-many-nums
+  [strings]
+  (map parse-nums strings))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Reads the file as a csv and outputs the resulting combinatorial sequence"
   [& args]
-  (println "Hello, World!"))
+  (def file-string (slurp (first args)))
+  (def seed (parse-many-nums (csv-to-vec file-string)))
+  (def product (apply idk seed))
+  (loop [i 0 v product]
+    (if (empty? v)
+      nil
+      (do
+        (if (= i 7)
+          (do (print (first v))
+              (print "\n"))
+          (print (first v)))
+        (recur (or (and (= i 7) 0) (inc i))
+               ((rest v)))))))
