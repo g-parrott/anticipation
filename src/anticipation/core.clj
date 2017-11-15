@@ -151,6 +151,6 @@
         (if (= i 7)
           (do (print (first v))
               (print "\n"))
-          (print (first v)))
+          (print (first v) " "))
         (recur (or (and (= i 7) 0) (inc i))
-               ((rest v)))))))
+               (rest v))))))
